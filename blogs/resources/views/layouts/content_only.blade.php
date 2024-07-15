@@ -9,13 +9,10 @@
     </head>
 
     <body class="flex flex-col min-h-screen">
-        @include('partials.header')
 
-        <main class="flex-grow">
+        <main class="min-h-screen">
             @yield('content')
         </main>
-
-        @include('partials.footer')
 
         @yield('script')
     </body>
