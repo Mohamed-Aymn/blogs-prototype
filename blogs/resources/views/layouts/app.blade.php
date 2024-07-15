@@ -8,10 +8,10 @@
         @vite('resources/css/app.css')
     </head>
 
-    <body>
+    <body class="flex flex-col min-h-screen">
         @include('partials.header')
 
-        <main>
+        <main class="flex-grow">
             @yield('content')
         </main>
 

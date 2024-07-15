@@ -1,89 +1,21 @@
-<header>
-    <nav class="bg-white border border-gray-200 dark:border-gray-700 px-2 sm:px-4 py-2.5 rounded dark:bg-gray-800 shadow">
-        <div class="container flex flex-wrap justify-between items-center mx-auto">
-        <a href="/" class="flex items-center">
-            <span class="self-center text-xl font-semibold whitespace-nowrap dark:text-white">
-            Website
-            </span>
-        </a>
-    
-        <div class="flex items-center">
-            <button
-            id="menu-toggle"
-            type="button"
-            class="inline-flex items-center p-2 ml-3 text-sm text-gray-500 rounded-lg hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-gray-200 dark:text-gray-400 dark:hover:bg-gray-700 dark:focus:ring-gray-600 md:hidden"
-            >
-            <span class="sr-only">Open main menu</span>
-            <!-- Hamburger icon -->
-            <svg class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                <path
-                stroke-linecap="round"
-                stroke-linejoin="round"
-                stroke-width="2"
-                d="M4 6h16M4 12h16m-7 6h7"
-                />
-            </svg>
+<header class="flex flex-wrap sm:justify-start sm:flex-nowrap w-full bg-white text-sm py-4">
+    <nav class="max-w-[85rem] w-full mx-auto px-4 sm:flex sm:items-center sm:justify-between" aria-label="Global">
+        <div class="flex items-center justify-between">
+        <a class="flex-none text-xl font-semibold " href="#">Brand</a>
+        <div class="sm:hidden">
+            <button type="button" class="hs-collapse-toggle p-2 inline-flex justify-center items-center gap-x-2 rounded-lg border border-gray-200 bg-white text-gray-800 shadow-sm hover:bg-gray-50 disabled:opacity-50 disabled:pointer-events-none" data-hs-collapse="#navbar-with-collapse" aria-controls="navbar-with-collapse" aria-label="Toggle navigation">
+            <svg class="hs-collapse-open:hidden flex-shrink-0 size-4" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="3" x2="21" y1="6" y2="6"/><line x1="3" x2="21" y1="12" y2="12"/><line x1="3" x2="21" y1="18" y2="18"/></svg>
+            <svg class="hs-collapse-open:block hidden flex-shrink-0 size-4" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 6 6 18"/><path d="m6 6 12 12"/></svg>
             </button>
         </div>
-    
-        <div
-            class="w-full md:block md:w-auto hidden"
-            id="mobile-menu"
-        >
-            <ul class="flex flex-col mt-4 md:flex-row md:space-x-8 md:mt-0 md:text-sm md:font-medium">
-            <li>
-                <a
-                href="#"
-                class="block py-2 pr-4 pl-3 text-white bg-blue-700 rounded md:bg-transparent md:text-blue-700 md:p-0 dark:text-white"
-                aria-current="page"
-                >
-                Home
-                </a>
-            </li>
-            <li>
-                <a
-                href="#"
-                class="block py-2 pr-4 pl-3 text-gray-700 border-b border-gray-100 hover:bg-gray-50 md:hover:bg-transparent md:border-0 md:hover:text-blue-700 md:p-0 dark:text-gray-400 md:dark:hover:text-white dark:hover:bg-gray-700 dark:hover:text-white md:dark:hover:bg-transparent dark:border-gray-700"
-                >
-                About
-                </a>
-            </li>
-            <li>
-                <a
-                href="#"
-                class="block py-2 pr-4 pl-3 text-gray-700 border-b border-gray-100 hover:bg-gray-50 md:hover:bg-transparent md:border-0 md:hover:text-blue-700 md:p-0 dark:text-gray-400 md:dark:hover:text-white dark:hover:bg-gray-700 dark:hover:text-white md:dark:hover:bg-transparent dark:border-gray-700"
-                >
-                Services
-                </a>
-            </li>
-            <li>
-                <a
-                href="#"
-                class="block py-2 pr-4 pl-3 text-gray-700 border-b border-gray-100 hover:bg-gray-50 md:hover:bg-transparent md:border-0 md:hover:text-blue-700 md:p-0 dark:text-gray-400 md:dark:hover:text-white dark:hover:bg-gray-700 dark:hover:text-white md:dark:hover:bg-transparent dark:border-gray-700"
-                >
-                Pricing
-                </a>
-            </li>
-            <li>
-                <a
-                href="#"
-                class="block py-2 pr-4 pl-3 text-gray-700 hover:bg-gray-50 md:hover:bg-transparent md:border-0 md:hover:text-blue-700 md:p-0 dark:text-gray-400 md:dark:hover:text-white dark:hover:bg-gray-700 dark:hover:text-white md:dark:hover:bg-transparent"
-                >
-                Contact
-                </a>
-            </li>
-            </ul>
         </div>
-    
+        <div id="navbar-with-collapse" class="hidden transition-all duration-[0.1ms] overflow-hidden basis-full grow sm:block">
+        <div class="flex flex-col gap-5 mt-5 sm:flex-row sm:items-center sm:justify-end sm:mt-0 sm:ps-5">
+            <a class="font-medium text-blue-500" href="#" aria-current="page">Landing</a>
+            <a class="font-medium text-gray-600 hover:text-gray-400 " href="#">Account</a>
+            <a class="font-medium text-gray-600 hover:text-gray-400 " href="#">Work</a>
+            <a class="font-medium text-gray-600 hover:text-gray-400 " href="#">Blog</a>
+        </div>
         </div>
     </nav>
-    
-    <script>
-        const menuToggle = document.getElementById('menu-toggle');
-        const mobileMenu = document.getElementById('mobile-menu');
-    
-        menuToggle.addEventListener('click', function () {
-        mobileMenu.classList.toggle('hidden');
-        });
-    </script>
 </header>
