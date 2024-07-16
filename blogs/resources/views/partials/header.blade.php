@@ -15,6 +15,16 @@
             <a class="font-medium text-gray-600 hover:text-gray-400 " href="#">Account</a>
             <a class="font-medium text-gray-600 hover:text-gray-400 " href="#">Work</a>
             <a class="font-medium text-gray-600 hover:text-gray-400 " href="#">Blog</a>
+            @auth
+                <form action="{{ route('logout') }}" method="POST" class="inline">
+                    @csrf
+                    <button type="submit" class="text-blue-500">Logout</button>
+                </form>
+            @endauth
+            @guest
+                <a class="font-medium text-gray-600 hover:text-gray-400 " href="#">Login</a>
+            @endguest
+
         </div>
         </div>
     </nav>
