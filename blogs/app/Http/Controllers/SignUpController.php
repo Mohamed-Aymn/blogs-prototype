@@ -3,10 +3,11 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Auth;
+use Tymon\JWTAuth\Facades\JWTAuth;
+use Illuminate\Support\Facades\Cookie;
+use Illuminate\Support\Facades\Hash;
 use App\Models\User;
-
 
 class SignUpController extends Controller
 {
@@ -30,9 +31,14 @@ class SignUpController extends Controller
                 'password' => Hash::make($request->password),
             ]);
 
+            // token based auth
+            $token = Auth::guard('api')->login($user);
+            $cookie = cookie('token', $token, 60, null, null, false, true); // 60 minutes, HTTP only
+
+            // session based auth
             Auth::login($user);
 
-            return redirect()->route('home')->with('success', 'Account created successfully.');
+            return redirect()->route('home')->with('success', 'Account created successfully.')->cookie($cookie);;
         } catch (\Exception $e) {
 
             dd($e);
