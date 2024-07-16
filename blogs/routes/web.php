@@ -9,8 +9,10 @@ use App\Http\Controllers\ProfileController;
 
 Route::get('/', [HomeController::class, 'index'])->name('home');
 Route::get('/blog/{id}', [BlogController::class, 'index']);
-Route::get('/login', [LoginController::class, 'index']);
 Route::get('/profile/{id}', [ProfileController::class, 'index']);
 
 Route::get('/signup', [SignUpController::class, 'index'])->name('signup');
 Route::post('/signup', [SignUpController::class, 'store'])->name('signup.store');
+
+Route::get('/login', [LoginController::class, 'index'])->name('login');
+Route::post('/login', [LoginController::class, 'authenticate'])->name('login.authenticate');
