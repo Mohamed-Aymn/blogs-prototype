@@ -1,5 +1,5 @@
 import { Route, Routes, Navigate, BrowserRouter } from 'react-router-dom';
-import Editor from './components/Editor';
+import Editor from './Routes/Editor';
 import './App.css'
 
 function App() {
