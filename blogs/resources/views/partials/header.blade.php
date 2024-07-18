@@ -10,22 +10,20 @@
         </div>
         </div>
         <div id="navbar-with-collapse" class="hidden transition-all duration-[0.1ms] overflow-hidden basis-full grow sm:block">
-        <div class="flex flex-col gap-5 mt-5 sm:flex-row sm:items-center sm:justify-end sm:mt-0 sm:ps-5">
-            <a class="font-medium text-blue-500" href="#" aria-current="page">Landing</a>
-            <a class="font-medium text-gray-600 hover:text-gray-400 " href="#">Account</a>
-            <a class="font-medium text-gray-600 hover:text-gray-400 " href="#">Work</a>
-            <a class="font-medium text-gray-600 hover:text-gray-400 " href="#">Blog</a>
-            @auth
-                <form action="{{ route('logout') }}" method="POST" class="inline">
-                    @csrf
-                    <button type="submit" class="text-blue-500">Logout</button>
-                </form>
-            @endauth
-            @guest
-                <a class="font-medium text-gray-600 hover:text-gray-400 " href="#">Login</a>
-            @endguest
-
-        </div>
+            <div class="flex flex-col gap-5 mt-5 sm:flex-row sm:items-center sm:justify-end sm:mt-0 sm:ps-5">
+                <a class="font-medium text-blue-500" href="#" aria-current="page">Landing</a>
+                <a class="font-medium text-gray-600 hover:text-gray-400 " href="#">Account</a>
+                <a class="font-medium text-gray-600 hover:text-gray-400 " href="#">Work</a>
+                <a class="font-medium text-gray-600 hover:text-gray-400 " href="#">Blog</a>
+                <?php if (isAuthenticated()): ?>
+                    <form action="<?php echo route('logout'); ?>" method="POST" class="inline">
+                        <?php echo csrf_field(); ?>
+                        <button type="submit" class="text-blue-500">Logout</button>
+                    </form>
+                <?php else: ?>
+                    <a class="font-medium text-gray-600 hover:text-gray-400" href="#">Login</a>
+                <?php endif; ?>
+            </div>
         </div>
     </nav>
 </header>
