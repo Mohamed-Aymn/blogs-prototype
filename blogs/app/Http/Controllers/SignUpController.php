@@ -26,7 +26,7 @@ class SignUpController extends Controller
 
         try {
             $user = User::create([
-                'name' => $request->first_name . ' ' . $request->last_name,
+                'name' => $request->name,
                 'email' => $request->email,
                 'password' => Hash::make($request->password),
             ]);

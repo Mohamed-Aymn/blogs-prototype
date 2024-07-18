@@ -1,7 +1,7 @@
 @extends('layouts.content_only')
 
 @section('content')
-    <section class="bg-white">
+    <div class="bg-white">
         <!-- Flex container for centering items -->
         <div class="flex h-screen flex-col items-center justify-center">
         <!-- Container for login form -->
@@ -14,7 +14,7 @@
             <!-- Login form -->
             <form action="{{ route('login.authenticate') }}" method="POST" class="w-full">
                 @csrf
-                <div class="mb-10 space-y-3">
+                <div class="mb-3 space-y-3">
                     <div class="space-y-1">
                     <div class="space-y-2">
                         <label class="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70" for="email">Email</label>
@@ -29,8 +29,9 @@
                 </div>
             </form>
             <!-- Signup link -->
-            <div class="text-center"> No account? <a class="text-blue-500" href="/signup">Create one</a> </div>
+            <div class="text-right text-gray-500"> No account? <a class="text-blue-500" href="/signup">Create one</a>.</div>
+            <a href="/" class="text-right text-gray-500 block"> Back to home page </a>
         </div>
         </div>
-    </section>   
+    </div>   
 @endsection
