@@ -31,18 +31,11 @@ class SignUpController extends Controller
                 'password' => Hash::make($request->password),
             ]);
 
-            // token based auth
-            $token = Auth::guard('api')->login($user);
-            $cookie = cookie('token', $token, 60, null, null, false, true); // 60 minutes, HTTP only
+            $token = JWTAuth::fromUser($user);
+            setcookie('token', $token, time() + (60 * 60), '/');
 
-            // session based auth
-            Auth::login($user);
-
-            return redirect()->route('home')->with('success', 'Account created successfully.')->cookie($cookie);;
+            return redirect()->route('home')->with('success', 'Account created successfully.');
         } catch (\Exception $e) {
-
-            dd($e);
-            // Redirect back with input and an error message
             return redirect()->back()->withInput()->withErrors(['message' => 'Account creation failed. Please try again.']);
         }
     }
