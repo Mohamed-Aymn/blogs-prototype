@@ -18,7 +18,7 @@
                         <button type="submit" class="text-blue-500">Logout</button>
                     </form>
                 <?php else: ?>
-                    <a class="font-medium text-gray-600 hover:text-gray-400" href="#">Login</a>
+                    <a class="font-medium text-gray-600 hover:text-gray-400" href="/login">Login</a>
                 <?php endif; ?>
             </div>
         </div>
