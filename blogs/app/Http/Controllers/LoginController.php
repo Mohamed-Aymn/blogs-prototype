@@ -21,36 +21,21 @@ class LoginController extends Controller
             'password' => 'required',
         ]);
 
-        // create jwt token for the api part
-        if (!$token = Auth::guard('api')->attempt($credentials)) {
-            return response()->json(['error' => 'Unauthorized'], 401);
+        // Attempt to authenticate the user
+        if (! $token = JWTAuth::attempt($credentials)) {
+            return back()->withErrors([
+                'email' => 'The provided credentials do not match our records.',
+            ])->onlyInput('email');
         }
-        $cookie = cookie('token', $token, 60, null, null, false, true); // 60 minutes, HTTP only
+        setcookie("token", $token);
 
-        // session based auth
-        if (Auth::attempt($credentials)) {
-            $request->session()->regenerate();
-
-            return redirect()->route('home')->with('success', 'Logged in.')->cookie($cookie);
-        }
-
-        return back()->withErrors([
-            'email' => 'The provided credentials do not match our records.',
-        ])->onlyInput('email');
+        return redirect()->route('home')->with('success', 'Logged in.');
     }
     
     public function logout(Request $request)
     {
-        // invalidate token and delete cookie
-        Auth::guard('api')->logout();
-        $cookie = Cookie::forget('token');
+        setcookie('token', '', time() - 3600, '/');
 
-        // logout from session based auth
-        Auth::logout();
-        $request->session()->invalidate();
-        $request->session()->regenerateToken();
-
-        // redirect
-        return redirect()->route('login')->with('success', 'Logged out.')->withCookie($cookie);
+        return redirect()->route('login')->with('success', 'Logged out.');
     }
 }
