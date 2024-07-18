@@ -21,3 +21,20 @@ if (!function_exists('isAuthenticated')) {
         return false;
     }
 }
+
+if (!function_exists('getUserIdFromToken')){
+    function getUserIdFromToken() {
+        try {
+            $token = isset($_COOKIE['token']) ? $_COOKIE['token'] : null;
+            if ($token) {
+                $user = JWTAuth::setToken($token)->authenticate();
+                if ($user) {
+                    return $user->id;
+                }
+            }
+        } catch (JWTException $e) {
+            // Token is invalid
+        }
+        return null;
+    }
+}

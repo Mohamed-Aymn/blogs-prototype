@@ -12,11 +12,8 @@
         <div id="navbar-with-collapse" class="hidden transition-all duration-[0.1ms] overflow-hidden basis-full grow sm:block">
             <div class="flex flex-col gap-5 mt-5 sm:flex-row sm:items-center sm:justify-end sm:mt-0 sm:ps-5">
                 <?php if (isAuthenticated()): ?>
-                    <a class="font-medium text-gray-600 hover:text-gray-400 " href="#">Profile</a>
-                    <form action="<?php echo route('logout'); ?>" method="POST" class="inline">
-                        @csrf
-                        <button type="submit" class="text-blue-500">Logout</button>
-                    </form>
+                    <?php $userId = getUserIdFromToken(); ?>
+                    <a class="font-medium text-gray-600 hover:text-gray-400" href="<?php echo $userId ? '/profile/' . $userId : '#'; ?>">Profile</a>
                 <?php else: ?>
                     <a class="font-medium text-gray-600 hover:text-gray-400" href="/login">Login</a>
                 <?php endif; ?>
