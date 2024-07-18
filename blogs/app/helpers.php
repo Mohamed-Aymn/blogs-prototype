@@ -22,14 +22,14 @@ if (!function_exists('isAuthenticated')) {
     }
 }
 
-if (!function_exists('getUserIdFromToken')){
-    function getUserIdFromToken() {
+if (!function_exists('getUserDataFromToken')){
+    function getUserDataFromToken() {
         try {
             $token = isset($_COOKIE['token']) ? $_COOKIE['token'] : null;
             if ($token) {
                 $user = JWTAuth::setToken($token)->authenticate();
                 if ($user) {
-                    return $user->id;
+                    return $user;
                 }
             }
         } catch (JWTException $e) {
