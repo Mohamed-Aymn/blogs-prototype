@@ -1,11 +1,12 @@
 import { useState, useRef, useEffect, KeyboardEvent } from 'react';
 import axios from 'axios';
 import InputItem, { InputItemRef } from '../components/InputItem';
+import { redirect } from 'react-router-dom';
 
 interface InputItemType {
     id: number;
     content: string;
-    type: number; // Add type property
+    type: number; // Add type to determine whether it is a normal textarea or H2
 }
 
 function Editor() {
@@ -23,13 +24,14 @@ function Editor() {
         const postData = {
             title,
             data: inputItems.map(item => ({
-                type: item.type,
+                type: item.type, 
                 data: item.content
             }))
         };
 
         try {
             await axios.post('http://localhost:3000/api/posts', postData);
+            window.location.href = "http://localhost:8000";
         } catch (error) {
             console.error('Error saving post:', error);
         }
@@ -38,19 +40,18 @@ function Editor() {
     const handleKeyDown = (e: KeyboardEvent<HTMLTextAreaElement>, index: number) => {
         if (e.key === 'Enter' && !e.shiftKey) {
             e.preventDefault();
-            const currentItem = inputItems[index];
-            if (currentItem.content.startsWith('/h2 ')) {
+            if (inputItems[index].content.startsWith('/h2 ')) {
                 // Insert a new InputItem after the H2Item
                 setInputItems(prev => [
                     ...prev.slice(0, index + 1),
-                    { id: prev.length + 1, content: '', type: 0 }, // Default type
+                    { id: prev.length + 1, content: '', type: 0 },
                     ...prev.slice(index + 1)
                 ]);
                 // Focus the newly added InputItem
                 setTimeout(() => inputRefs.current[index + 1]?.focus(), 0);
             } else {
                 // Handle Enter in normal InputItem case
-                setInputItems(prev => [...prev, { id: prev.length + 1, content: '', type: 0 }]); // Default type
+                setInputItems(prev => [...prev, { id: prev.length + 1, content: '', type: 0 }]);
             }
         } else if (e.key === 'Backspace' && e.currentTarget.value === '' && inputItems.length > 1) {
             e.preventDefault();
@@ -63,8 +64,7 @@ function Editor() {
     };
 
     const handleContentChange = (index: number, value: string) => {
-        const newType = value.startsWith('/h2 ') ? 1 : 0; // Determine type based on content
-        setInputItems(prev => prev.map((item, i) => i === index ? { ...item, content: value, type: newType } : item));
+        setInputItems(prev => prev.map((item, i) => i === index ? { ...item, content: value, type: value.startsWith('/h2 ') ? 1 : 0 } : item));
     };
 
     return (
@@ -83,6 +83,7 @@ function Editor() {
                         setContent={(value) => handleContentChange(index, value)}
                         onKeyDown={(e) => handleKeyDown(e, index)}
                         ref={el => inputRefs.current[index] = el}
+                        type={item.type} // Pass type to InputItem
                     />
                 ))}
             </div>
@@ -90,8 +91,8 @@ function Editor() {
                 <button 
                     onClick={() => savePost()}
                     className="bg-gray-500 text-white py-2 px-4 rounded"
-                >
-                    Save
+                    >
+                        Save
                 </button>
             </div>
         </div>

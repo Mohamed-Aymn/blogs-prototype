@@ -3,32 +3,30 @@ import H2Item from './H2Item'; // Import the H2Item component
 
 interface InputItemProps {
     onKeyDown: (e: KeyboardEvent<HTMLTextAreaElement>) => void;
-    content: string; // Add a content prop to manage the current value
-    setContent: (value: string) => void; // Add a setContent function to manage the content
+    content: string;
+    setContent: (value: string) => void;
+    type: number; // Add type to handle content differently based on type
 }
 
 export type InputItemRef = HTMLTextAreaElement;
 
-const InputItem = forwardRef<InputItemRef, InputItemProps>(({ onKeyDown, content, setContent }, ref) => {
+const InputItem = forwardRef<InputItemRef, InputItemProps>(({ onKeyDown, content, setContent, type }, ref) => {
     const handleChange = (e: ChangeEvent<HTMLTextAreaElement>) => {
         setContent(e.target.value);
     };
 
-    // Check if content starts with '/h2 ' and has more than the prefix
-    const isH2 = content.startsWith('/h2 ') && content.length > 4;
-
-    if (isH2) {
-        // Render H2Item if the content is an H2
+    if (type === 1) {
+        // Render H2Item if the type is 1
         return (
             <H2Item
                 content={content.slice(4)} // Remove '/h2 ' prefix
                 onChange={(value: string) => setContent(`/h2 ${value}`)} // Add '/h2 ' prefix back
-                onKeyDown={onKeyDown} // Handle key down for H2Item
-                ref={ref} // Pass ref to H2Item
+                onKeyDown={onKeyDown}
+                ref={ref}
             />
         );
     } else {
-        // Render a textarea if the content is not an H2
+        // Render a textarea if the type is 0
         return (
             <textarea
                 className="item w-full border-0 outline-none resize-none hover:bg-gray-100 px-2 py-1 transition-all"

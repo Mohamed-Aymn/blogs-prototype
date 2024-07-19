@@ -1,4 +1,3 @@
-// H2Item.tsx
 import { forwardRef, ChangeEvent, KeyboardEvent } from 'react';
 
 interface H2ItemProps {
