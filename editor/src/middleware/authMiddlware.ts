@@ -13,7 +13,6 @@ export const authMiddleware = async (req: Request, res: Response, next: NextFunc
         jwt.verify(token, secretKey)
         next();
     } catch (error: any) {
-        console.error('Error decrypting cookie:', error.message);
         return res.redirect('http://localhost:8000');
     }
 };

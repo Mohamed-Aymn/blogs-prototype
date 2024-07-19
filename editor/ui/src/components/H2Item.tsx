@@ -1,5 +1,5 @@
 // H2Item.tsx
-import React, { forwardRef, ChangeEvent, KeyboardEvent } from 'react';
+import { forwardRef, ChangeEvent, KeyboardEvent } from 'react';
 
 interface H2ItemProps {
     content: string;
