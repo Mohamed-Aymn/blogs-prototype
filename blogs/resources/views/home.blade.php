@@ -18,8 +18,6 @@
             </div>
         </div>
 
-        <textarea rows="1"/>
-
         {{-- blogs list --}}
         <div class="bg-white border rounded-xl shadow-sm sm:flex ">
             <div class="p-4 flex flex-col h-full sm:p-7">
