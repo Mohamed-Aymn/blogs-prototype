@@ -1,27 +1,27 @@
-import { Collection, ObjectId } from 'mongodb';
+import { Collection, ObjectId, IntegerType } from 'mongodb';
 import { getDatabase } from '../db';
 import { IPost } from '../types/post';
 
 const getPostsCollection = (): Collection<IPost> => {
-    return getDatabase().collection<IPost>('users');
+    return getDatabase().collection<IPost>('posts');
 };
 
-export const createPost = async (user: IPost): Promise<IPost> => {
+export const createPost = async (post: IPost): Promise<IPost> => {
     const collection = getPostsCollection();
-    const result = await collection.insertOne(user);
-    user._id = result.insertedId.toString();
-    return user;
+    const result = await collection.insertOne(post);
+    post._id = result.insertedId;
+    return post;
 };
 
 export const getPostById = async (id: string): Promise<IPost | null> => {
     const collection = getPostsCollection();
-    const user = await collection.findOne({ _id: new ObjectId(id) });
-    return user;
+    const post = await collection.findOne({ _id: new ObjectId(id) });
+    return post;
 };
 
-export const updatePost = async (id: string, user: Partial<IPost>): Promise<void> => {
+export const updatePost = async (id: string, post: Partial<IPost>): Promise<void> => {
     const collection = getPostsCollection();
-    await collection.updateOne({ _id: new ObjectId(id) }, { $set: user });
+    await collection.updateOne({ _id: new ObjectId(id) }, { $set: post });
 };
 
 export const deletePost = async (id: string): Promise<void> => {
