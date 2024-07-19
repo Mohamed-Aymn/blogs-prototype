@@ -1,6 +1,5 @@
 import { useState, useRef, useEffect, KeyboardEvent } from 'react';
-import InputItem, { InputItemRef } from "../components/InputItem";
-import H2Item from "../components/H2Item";
+import InputItem, { InputItemRef } from '../components/InputItem';
 
 interface InputItemType {
     id: number;
@@ -47,30 +46,6 @@ function Editor() {
         setInputItems(prev => prev.map((item, i) => i === index ? { ...item, content: value } : item));
     };
 
-    const renderItem = (item: InputItemType, index: number) => {
-        if (item.content.startsWith('/h2 ') && item.content.length > 4) {
-            return (
-                <H2Item
-                    key={item.id}
-                    content={item.content.slice(4)}
-                    onChange={(value) => handleContentChange(index, `/h2 ${value}`)}
-                    onKeyDown={(e) => handleKeyDown(e, index)}
-                    ref={el => inputRefs.current[index] = el as InputItemRef}
-                />
-            );
-        } else {
-            return (
-                <InputItem
-                    key={item.id}
-                    content={item.content}
-                    setContent={(value) => handleContentChange(index, value)}
-                    onKeyDown={(e) => handleKeyDown(e, index)}
-                    ref={el => inputRefs.current[index] = el}
-                />
-            );
-        }
-    };
-
     return (
         <div className="mx-auto px-6 max-w-[85rem]">
             <input
@@ -78,7 +53,15 @@ function Editor() {
                 placeholder="Blog Title"
             />
             <div id="content" className="mt-10">
-                {inputItems.map((item, index) => renderItem(item, index))}
+                {inputItems.map((item, index) => (
+                    <InputItem
+                        key={item.id}
+                        content={item.content}
+                        setContent={(value) => handleContentChange(index, value)}
+                        onKeyDown={(e) => handleKeyDown(e, index)}
+                        ref={el => inputRefs.current[index] = el}
+                    />
+                ))}
             </div>
         </div>
     );
