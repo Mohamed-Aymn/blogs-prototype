@@ -1,10 +1,10 @@
 import { forwardRef, KeyboardEvent } from 'react';
 
 interface InputItemProps {
-    onKeyDown: (e: KeyboardEvent<HTMLInputElement>) => void;
+    onKeyDown: (e: KeyboardEvent<HTMLTextAreaElement>) => void;
 }
 
-export type InputItemRef = HTMLInputElement;
+export type InputItemRef = HTMLTextAreaElement;
 
 const InputItem = forwardRef<InputItemRef, InputItemProps>(({ onKeyDown }, ref) => {
     return (
@@ -16,8 +16,8 @@ const InputItem = forwardRef<InputItemRef, InputItemProps>(({ onKeyDown }, ref) 
             >
                 <path d="M3.75 5.25h16.5m-16.5 4.5h16.5m-16.5 4.5h16.5m-16.5 4.5h16.5" />
             </svg>
-            <input
-                className="item w-full border-0 outline-none"
+            <textarea
+                className="item w-full border-0 outline-none resize-none"
                 placeholder="Type here!"
                 onKeyDown={onKeyDown}
                 ref={ref}
