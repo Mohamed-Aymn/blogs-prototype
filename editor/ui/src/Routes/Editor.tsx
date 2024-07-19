@@ -2,13 +2,15 @@ import { useState, useRef, useEffect, KeyboardEvent } from 'react';
 import Footer from "../components/Footer";
 import Header from "../components/Header";
 import InputItem, { InputItemRef } from "../components/InputItem";
+import H2Item from "../components/H2Item";
 
 interface InputItemType {
     id: number;
+    content: string;
 }
 
 function Editor() {
-    const [inputItems, setInputItems] = useState<InputItemType[]>([{ id: 1 }]);
+    const [inputItems, setInputItems] = useState<InputItemType[]>([{ id: 1, content: '' }]);
     const inputRefs = useRef<(InputItemRef | null)[]>([]);
 
     useEffect(() => {
@@ -20,15 +22,54 @@ function Editor() {
     const handleKeyDown = (e: KeyboardEvent<HTMLTextAreaElement>, index: number) => {
         if (e.key === 'Enter' && !e.shiftKey) {
             e.preventDefault();
-            setInputItems(prev => [...prev, { id: prev.length + 1 }]);
+            if (inputItems[index].content.startsWith('/h2 ')) {
+                // Insert a new InputItem after the H2Item
+                setInputItems(prev => [
+                    ...prev.slice(0, index + 1),
+                    { id: prev.length + 1, content: '' },
+                    ...prev.slice(index + 1)
+                ]);
+                // Focus the newly added InputItem
+                setTimeout(() => inputRefs.current[index + 1]?.focus(), 0);
+            } else {
+                // Handle Enter in normal InputItem case
+                setInputItems(prev => [...prev, { id: prev.length + 1, content: '' }]);
+            }
         } else if (e.key === 'Backspace' && e.currentTarget.value === '' && inputItems.length > 1) {
             e.preventDefault();
             const newInputItems = inputItems.filter((_, i) => i !== index);
             setInputItems(newInputItems);
             inputRefs.current = inputRefs.current.filter((_, i) => i !== index);
-            // Focus the previous input
             const previousIndex = index > 0 ? index - 1 : 0;
             inputRefs.current[previousIndex]?.focus();
+        }
+    };
+
+    const handleContentChange = (index: number, value: string) => {
+        setInputItems(prev => prev.map((item, i) => i === index ? { ...item, content: value } : item));
+    };
+
+    const renderItem = (item: InputItemType, index: number) => {
+        if (item.content.startsWith('/h2 ') && item.content.length > 4) {
+            return (
+                <H2Item
+                    key={item.id}
+                    content={item.content.slice(4)}
+                    onChange={(value) => handleContentChange(index, `/h2 ${value}`)}
+                    onKeyDown={(e) => handleKeyDown(e, index)}
+                    ref={el => inputRefs.current[index] = el as InputItemRef}
+                />
+            );
+        } else {
+            return (
+                <InputItem
+                    key={item.id}
+                    content={item.content}
+                    setContent={(value) => handleContentChange(index, value)}
+                    onKeyDown={(e) => handleKeyDown(e, index)}
+                    ref={el => inputRefs.current[index] = el}
+                />
+            );
         }
     };
 
@@ -42,13 +83,7 @@ function Editor() {
                         placeholder="Blog Title"
                     />
                     <div id="content" className="mt-10">
-                        {inputItems.map((item, index) => (
-                            <InputItem
-                                key={item.id}
-                                onKeyDown={(e) => handleKeyDown(e, index)}
-                                ref={el => inputRefs.current[index] = el}
-                            />
-                        ))}
+                        {inputItems.map((item, index) => renderItem(item, index))}
                     </div>
                 </div>
             </div>
