@@ -37,7 +37,10 @@ function Editor() {
             <Header />
             <div className="flex-grow w-full">
                 <div className="mx-auto px-6 max-w-[85rem]">
-                    <input className="text-4xl border-0 outline-none py-1 w-full" placeholder="Blog Title" />
+                    <input
+                        className="text-4xl border-0 outline-none py-1 w-full"
+                        placeholder="Blog Title"
+                    />
                     <div id="content" className="mt-10">
                         {inputItems.map((item, index) => (
                             <InputItem
