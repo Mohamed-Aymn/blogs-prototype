@@ -3,13 +3,18 @@ import path from 'path';
 import { authMiddleware } from './middleware/authMiddlware';
 import cookieParser from 'cookie-parser';
 import { connectToDatabase } from './persistence/db';
+import { postsRouter } from './routes/posts';
 
 const app = express();
 const port = process.env.PORT || 3000;
 
 app.use(cookieParser())
-app.use(authMiddleware);
 
+// unauthenticated routes
+app.use('/api/posts', postsRouter)
+
+// authenticated routes
+app.use(authMiddleware);
 // Serve the static files from the React app
 app.use(express.static(path.join(__dirname, '../ui/dist')));
 

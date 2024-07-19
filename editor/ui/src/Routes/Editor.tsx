@@ -16,6 +16,10 @@ function Editor() {
         }
     }, [inputItems]);
 
+    const savePost = () => {
+
+    }
+
     const handleKeyDown = (e: KeyboardEvent<HTMLTextAreaElement>, index: number) => {
         if (e.key === 'Enter' && !e.shiftKey) {
             e.preventDefault();
@@ -62,6 +66,14 @@ function Editor() {
                         ref={el => inputRefs.current[index] = el}
                     />
                 ))}
+            </div>
+            <div className='w-full flex justify-end'>
+                <button 
+                    onClick={() => savePost()}
+                    className="bg-gray-500 text-white py-2 px-4 rounded"
+                    >
+                        Save
+                </button>
             </div>
         </div>
     );
