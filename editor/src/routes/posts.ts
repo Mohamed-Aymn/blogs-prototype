@@ -1,17 +1,34 @@
 import express from "express";
 import { authMiddleware } from "../middleware/authMiddlware";
-import { createPost } from "../persistence/repositories/postRepository";
+import { createPost, getAllPosts, getPostById } from "../persistence/repositories/postRepository";
 
 export const postsRouter = express.Router()
 postsRouter.use(express.json());
 
 // unauthenticated routes
-postsRouter.get('/', (req, res) => {
-    res.send('posts');
-})
-postsRouter.get('/:id', (req, res) => {
-    const postId = req.params.id;
-    res.send(`Post ID: ${postId}`);
+postsRouter.get('/', async (req, res) => {
+    try {
+        const posts = await getAllPosts();
+        res.status(200).json(posts);
+    } catch (error) {
+        console.error('Failed to fetch posts:', error);
+        res.status(500).json({ error: 'Failed to fetch posts' });
+    }
+});
+postsRouter.get('/:id', async (req, res) => {
+    try {
+        const postId = req.params.id;
+        const post = await getPostById(postId);
+
+        if (!post) {
+            return res.status(404).json({ error: 'Post not found' });
+        }
+
+        res.status(200).json(post);
+    } catch (error) {
+        console.error('Failed to fetch post:', error);
+        res.status(500).json({ error: 'Failed to fetch post' });
+    }
 });
 
 // authenticated routes
@@ -31,3 +48,7 @@ postsRouter.post('/', async(req, res) => {
         res.status(500).json({ error: 'Failed to create post' });
     }
 })
+
+function getPostsCollection() {
+    throw new Error("Function not implemented.");
+}

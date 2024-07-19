@@ -19,6 +19,12 @@ export const getPostById = async (id: string): Promise<IPost | null> => {
     return post;
 };
 
+export const getAllPosts = async (): Promise<IPost[]> => {
+    const collection = getPostsCollection();
+    const posts = await collection.find().toArray();
+    return posts;
+};
+
 export const updatePost = async (id: string, post: Partial<IPost>): Promise<void> => {
     const collection = getPostsCollection();
     await collection.updateOne({ _id: new ObjectId(id) }, { $set: post });
