@@ -1,6 +1,4 @@
 import { useState, useRef, useEffect, KeyboardEvent } from 'react';
-import Footer from "../components/Footer";
-import Header from "../components/Header";
 import InputItem, { InputItemRef } from "../components/InputItem";
 import H2Item from "../components/H2Item";
 
@@ -74,20 +72,14 @@ function Editor() {
     };
 
     return (
-        <div className="flex flex-col min-h-screen">
-            <Header />
-            <div className="flex-grow w-full">
-                <div className="mx-auto px-6 max-w-[85rem]">
-                    <input
-                        className="text-4xl border-0 outline-none py-1 w-full"
-                        placeholder="Blog Title"
-                    />
-                    <div id="content" className="mt-10">
-                        {inputItems.map((item, index) => renderItem(item, index))}
-                    </div>
-                </div>
+        <div className="mx-auto px-6 max-w-[85rem]">
+            <input
+                className="text-4xl border-0 outline-none py-1 w-full"
+                placeholder="Blog Title"
+            />
+            <div id="content" className="mt-10">
+                {inputItems.map((item, index) => renderItem(item, index))}
             </div>
-            <Footer />
         </div>
     );
 }
