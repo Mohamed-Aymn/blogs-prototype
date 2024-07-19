@@ -1,10 +1,8 @@
 import express from 'express';
 import path from 'path';
 import { authMiddleware } from './middleware/authMiddlware';
-import dotenv from 'dotenv';
 import cookieParser from 'cookie-parser';
-
-dotenv.config();
+import { connectToDatabase } from './persistence/db';
 
 const app = express();
 const port = process.env.PORT || 3000;
@@ -15,6 +13,18 @@ app.use(authMiddleware);
 // Serve the static files from the React app
 app.use(express.static(path.join(__dirname, '../ui/dist')));
 
-app.listen(port, () => {
-    console.log(`Server is running on http://localhost:${port}`);
-});
+// startServer function adds database connection dependency before starting the server
+const startServer = async () => {
+    try {
+        // mongodb connection
+        await connectToDatabase();
+        app.listen(port, () => {
+            console.log(`Server is running on http://localhost:${port}`);
+        });
+    } catch (error) {
+        console.error('Failed to connect to the database', error);
+        process.exit(1);
+    }
+};
+
+startServer();
