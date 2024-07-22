@@ -1,0 +1,89 @@
+version: '3.8'
+
+services: 
+  laravel:
+    build:
+      context: ./blogs
+      dockerfile: Dockerfile
+    image: laravel-app
+    container_name: laravel-app
+    ports:
+      - "8000:8000"
+    volumes:
+      - ./blogs:/var/www
+    networks:
+      - app-network
+    env_file:
+      - laravel.env
+    depends_on:
+      - mysql
+      - redis
+    command: ["sh", "-c", "php-fpm & npm run dev & php artisan serve --host=0.0.0.0 --port=8000"]
+
+  migrate:
+    image: laravel-app
+    container_name: laravel-migrate
+    volumes:
+      - ./blogs:/var/www
+    networks:
+      - app-network
+    env_file:
+      - laravel.env
+    depends_on:
+      - mysql
+    entrypoint: ["sh", "-c", "./wait-for-mysql.sh mysql php artisan migrate --force"]
+
+  mysql:
+    image: mysql:8.0
+    container_name: mysql-db
+    ports:
+      - "3306:3306"
+    volumes:
+      - mysql-data:/var/lib/mysql
+    env_file:
+      - ./mysql.env
+    networks:
+      - app-network
+
+  nodejs:
+    build:
+      context: ./editor
+      dockerfile: Dockerfile
+    image: node-app
+    container_name: node-app
+    ports:
+      - "3000:3000"
+    volumes:
+      - ./editor:/usr/src/app
+    networks:
+      - app-network
+    depends_on:
+      - mongo
+    env_file:
+      - node.env
+
+  mongo:
+    image: mongo
+    container_name: mongo-db
+    ports:
+      - "27017:27017"
+    volumes:
+      - mongo-data:/data/db
+    networks:
+      - app-network
+
+  redis:
+    image: redis:alpine
+    container_name: redis
+    ports:
+      - "6379:6379"
+    networks:
+      - app-network
+
+networks:
+  app-network:
+    driver: bridge
+
+volumes:
+  mysql-data:
+  mongo-data:

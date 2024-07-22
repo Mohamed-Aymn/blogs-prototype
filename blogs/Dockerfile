@@ -1,35 +1,44 @@
-# Use the official PHP image with a specific tag for version and variants
+# Use the official PHP image as the base image
 FROM php:8.2-fpm
 
 # Set working directory
 WORKDIR /var/www
 
-# Install system dependencies and PHP extensions
+# Install system dependencies
 RUN apt-get update && apt-get install -y \
+    build-essential \
     libpng-dev \
-    libjpeg-dev \
+    libjpeg62-turbo-dev \
     libfreetype6-dev \
-    libzip-dev \
-    libonig-dev \
-    git \
+    locales \
+    zip \
+    jpegoptim optipng pngquant gifsicle \
+    vim \
     unzip \
-    && rm -rf /var/lib/apt/lists/*
+    git \
+    curl \
+    libonig-dev \
+    libzip-dev \
+    nodejs \
+    npm
+
+# Clear cache
+RUN apt-get clean && rm -rf /var/lib/apt/lists/*
 
 # Install PHP extensions
-RUN docker-php-ext-configure gd --with-freetype --with-jpeg \
-    && docker-php-ext-install gd zip pdo pdo_mysql
+RUN docker-php-ext-install pdo pdo_mysql mbstring zip exif pcntl
+RUN docker-php-ext-configure gd --with-freetype --with-jpeg
+RUN docker-php-ext-install gd
 
 # Install Composer
 COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
 
-# Copy application code
-COPY . .
+# Copy existing application directory contents
+COPY . /var/www
 
-# Install PHP dependencies
-RUN composer install --no-dev --optimize-autoloader
+# Copy existing application directory permissions
+COPY --chown=www-data:www-data . /var/www
 
-# Expose port 9000
+# Expose port 9000 and start php-fpm server
 EXPOSE 9000
-
-# Start the PHP FastCGI Process Manager
 CMD ["php-fpm"]
