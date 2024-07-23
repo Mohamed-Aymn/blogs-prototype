@@ -6,17 +6,15 @@ WORKDIR /app
 
 # Copy package.json and package-lock.json
 COPY package*.json ./
-# Install dependencies
+
+# Install dependencies, including devDependencies
 RUN npm install
 
 # Copy application code
 COPY . .
 
-# build application
-RUN npm run build 
-
 # Expose the port your app runs on
 EXPOSE 3000
 
-# Start the application
-CMD ["npm", "start"]
+# Start the application in development mode
+CMD ["npm", "run", "dev:fullstack"]

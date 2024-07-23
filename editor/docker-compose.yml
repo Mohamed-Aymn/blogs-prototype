@@ -10,7 +10,7 @@ services:
     ports:
       - "3000:3000"
     networks:
-      - sail
+      - blogs_app
     depends_on:
       - mongo
     env_file:
@@ -24,11 +24,11 @@ services:
     volumes:
       - mongo-data:/data/db
     networks:
-      - sail
+      - blogs_app
 
 networks:
-  sail:
-      driver: bridge
+  blogs_app:
+    external: true
 
 volumes:
   mongo-data:
