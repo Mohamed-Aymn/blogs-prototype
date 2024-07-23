@@ -9,15 +9,8 @@ export default defineConfig({
         }),
     ],
     server:{
-        strictPort: true,
-        port: 5173,
-        host: '0.0.0.0',
-        origin: 'http://localhost:5173',
         hmr: {
-            host: 'localhost',
-        },
-        watch: {
-            ignored: ['./app/**', './bootstrap/**', './config/**', './database/**', './lang/**', './node_modules/**', './public/**', './routes/**', './storage/**', './tests/**', './vendor/**'],
-        },
+            host: "localhost",
+        }
     }
 });

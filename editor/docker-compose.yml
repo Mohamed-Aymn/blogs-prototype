@@ -1,0 +1,34 @@
+version: '3.8'
+
+services: 
+  nodejs:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    image: node-app
+    container_name: node-app
+    ports:
+      - "3000:3000"
+    networks:
+      - sail
+    depends_on:
+      - mongo
+    env_file:
+      - .env
+
+  mongo:
+    image: mongo
+    container_name: mongo-db
+    ports:
+      - "27017:27017"
+    volumes:
+      - mongo-data:/data/db
+    networks:
+      - sail
+
+networks:
+  sail:
+      driver: bridge
+
+volumes:
+  mongo-data:
