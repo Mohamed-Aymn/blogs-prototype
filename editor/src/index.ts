@@ -13,6 +13,12 @@ app.use(cookieParser())
 // unauthenticated routes
 app.use('/api/posts', postsRouter)
 
+app.use('/editor/config', (req, res)=>{
+    res.send({
+        apiUrl: process.env.APP_URL
+    })
+})
+
 // app.get('/editor', (req, res) => {
 //     console.log('Accessing /editor route'); // Debug log
 //     res.send('Editor route is working');
