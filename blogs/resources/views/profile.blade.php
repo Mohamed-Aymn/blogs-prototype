@@ -9,7 +9,6 @@
         <p class="text-center text-gray-600 mt-1">{{$user->email}}</p>
 
         <div class="flex items-center w-full">
-            {{-- <a href="http://nodejs:3000" class="text-gray-500 flex-grow">Create Post</a> --}}
             <a href="http://blogs.demo/editor" class="text-gray-500 flex-grow">Create Post</a>
 
             <form action="{{ route('logout') }}" method="POST">
