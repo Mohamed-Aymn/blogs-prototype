@@ -13,10 +13,22 @@ app.use(cookieParser())
 // unauthenticated routes
 app.use('/api/posts', postsRouter)
 
+// app.get('/editor', (req, res) => {
+//     console.log('Accessing /editor route'); // Debug log
+//     res.send('Editor route is working');
+// });
+
 // authenticated routes
 app.use(authMiddleware);
 // Serve the static files from the React app
-app.use(express.static(path.join(__dirname, '../ui/dist')));
+// app.use("/editor", express.static('static'));
+app.use("/editor", express.static(path.join(__dirname, '../ui/dist')));
+
+// app.get("/editor", (req, res) => {
+//     res.sendFile(path.join(__dirname, "../ui/dist"));
+// });
+
+// app.use("/editor", express.static("editor"));
 
 // startServer function adds database connection dependency before starting the server
 const startServer = async () => {

@@ -13,4 +13,7 @@ cd - || { echo "Failed to return to the initial directory"; exit 1; }
 echo "Stopping Node.js application..."
 docker-compose -f $NODE_APP_PATH/docker-compose.yml down || { echo "Failed to stop Node.js application"; exit 1; }
 
+echo "Stopping other componentns"
+docker-compose down
+
 echo "All services stopped successfully."
