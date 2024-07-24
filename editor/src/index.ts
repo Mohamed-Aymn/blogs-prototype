@@ -5,24 +5,30 @@ import cookieParser from 'cookie-parser';
 import { connectToDatabase } from './persistence/db';
 import { postsRouter } from './routes/posts';
 
+// configuration
 const app = express();
 const port = process.env.PORT || 3000;
-
 app.use(cookieParser())
+const router = express.Router();
 
-// unauthenticated routes
-app.use('/api/posts', postsRouter)
+// Unauthenticated routes
+router.use('/api/posts', postsRouter)
+router.use('/api/config', (req, res) => {
+    res.send({
+        apiUrl: process.env.APP_URL
+    });
+});
 
-// authenticated routes
-app.use(authMiddleware);
-// Serve the static files from the React app
-app.use(express.static(path.join(__dirname, '../ui/dist')));
+// Authenticated routes
+router.use(authMiddleware);
+router.use(express.static(path.join(__dirname, '../ui/dist')));
 
-// startServer function adds database connection dependency before starting the server
+
+// server boot
 const startServer = async () => {
     try {
-        // mongodb connection
         await connectToDatabase();
+        app.use('/editor', router);
         app.listen(port, () => {
             console.log(`Server is running on http://localhost:${port}`);
         });

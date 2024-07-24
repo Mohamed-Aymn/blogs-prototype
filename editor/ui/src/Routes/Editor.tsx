@@ -1,7 +1,6 @@
 import { useState, useRef, useEffect, KeyboardEvent } from 'react';
 import axios from 'axios';
 import InputItem, { InputItemRef } from '../components/InputItem';
-import { redirect } from 'react-router-dom';
 
 interface InputItemType {
     id: number;

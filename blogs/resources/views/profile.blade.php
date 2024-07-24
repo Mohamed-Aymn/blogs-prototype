@@ -9,7 +9,8 @@
         <p class="text-center text-gray-600 mt-1">{{$user->email}}</p>
 
         <div class="flex items-center w-full">
-            <a href="http://localhost:3000" class="text-gray-500 flex-grow">Create Post</a>
+            <a href="{{env('APP_URL')}}/editor" class="text-gray-500 flex-grow">Create Post</a>
+
             <form action="{{ route('logout') }}" method="POST">
                 @csrf
                 <button type="submit" class="text-gray-500 text-right">Logout</button>

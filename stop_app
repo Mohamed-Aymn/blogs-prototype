@@ -1,0 +1,19 @@
+#!/bin/bash
+
+LARAVEL_APP_PATH="./blogs"
+NODE_APP_PATH="./editor"
+
+# Stop Laravel app
+echo "Stopping Laravel application..."
+cd $LARAVEL_APP_PATH || { echo "Failed to change directory to $LARAVEL_APP_PATH"; exit 1; }
+./vendor/bin/sail down || { echo "Failed to stop Laravel application"; exit 1; }
+cd - || { echo "Failed to return to the initial directory"; exit 1; }
+
+# Stop Node.js app
+echo "Stopping Node.js application..."
+docker-compose -f $NODE_APP_PATH/docker-compose.yml down || { echo "Failed to stop Node.js application"; exit 1; }
+
+echo "Stopping other componentns"
+docker-compose down
+
+echo "All services stopped successfully."

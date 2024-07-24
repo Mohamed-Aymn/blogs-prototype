@@ -1,0 +1,38 @@
+version: '3.8'
+
+services: 
+  nodejs:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    image: node-app
+    container_name: node-app
+    ports:
+      - "3000:3000"
+    networks:
+      - blogs_app
+    depends_on:
+      - mongo
+    env_file:
+      - .env
+    volumes:
+      - .:/app
+      - /app/node_modules
+      - /app/ui/node_modules
+
+  mongo:
+    image: mongo
+    container_name: mongo-db
+    ports:
+      - "27017:27017"
+    volumes:
+      - mongo-data:/data/db
+    networks:
+      - blogs_app
+
+networks:
+  blogs_app:
+    external: true
+
+volumes:
+  mongo-data:
