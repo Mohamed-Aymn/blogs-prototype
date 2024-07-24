@@ -15,7 +15,7 @@ export const ConfigProvider = ({ children }: { children: ReactNode }) => {
   const [config, setConfig] = useState<Config>({ apiUrl: '' });
 
   useEffect(() => {
-    fetch('/editor/config')
+    fetch('/editor/api/config')
       .then(response => response.json())
       .then(data => setConfig(data))
       .catch(error => console.error('Error fetching config:', error));
