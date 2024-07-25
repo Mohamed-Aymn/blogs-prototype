@@ -1,6 +1,7 @@
 import { Request, Response, NextFunction } from 'express';
 import jwt from 'jsonwebtoken';
 import dotenv from 'dotenv';
+import axios from 'axios';
 
 dotenv.config();
 
@@ -16,6 +17,6 @@ export const authMiddleware = async (req: Request, res: Response, next: NextFunc
         jwt.verify(token, secretKey)
         next();
     } catch (error: any) {
-        return res.redirect('http://laraveaal.test:8000');
+        return res.redirect('http://blogs.demo/');
     }
 };
