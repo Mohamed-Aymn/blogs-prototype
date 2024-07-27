@@ -1,9 +1,9 @@
 import { ObjectId } from "mongodb";
 
-export interface IPost{
-    _id?: ObjectId;
+export interface IPostCreatedEvent{
+    _id: string | ObjectId;
     title: string;
-    content: Array<IPostItem>
+    content: Array<IPostItem>;
 } 
 
 export interface IPostItem{

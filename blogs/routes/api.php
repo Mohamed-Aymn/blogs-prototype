@@ -6,7 +6,6 @@ use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\DB;
 use App\Models\User;
-use JWTAuth;
 
 Route::prefix('posts')->group(function () {
     Route::get('/', function (Request $request) {
