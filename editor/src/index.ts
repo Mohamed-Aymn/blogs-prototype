@@ -6,6 +6,7 @@ import { connectToDatabase } from './persistence/db';
 import { postsRouter } from './routes/posts';
 import { connectRedis } from './events/redisClient';
 import { config } from './config';
+import { createdPostApiSubscriber } from './events/subscriber/createdPostApiSubscriber';
 
 // configuration
 const app = express();
@@ -29,6 +30,7 @@ const startServer = async () => {
     try {
         await connectToDatabase();
         await connectRedis(); 
+        createdPostApiSubscriber();
 
         app.use('/editor', router);
         app.listen(config.app.port, () => {
