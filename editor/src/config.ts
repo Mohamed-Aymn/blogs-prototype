@@ -7,7 +7,8 @@ export const config = {
         url: process.env.REDIS_URL || "redis://localhost:6379",
     },
     db: {
-        url: process.env.DATABASE_URL || 'mongodb://localhost:27017/mydb',
+        url: process.env.MONGO_DB_URL || 'mongodb://localhost:27017',
+        dbName: process.env.MONGO_DB_NAME || 'blogs'
     },
     app: {
         port: process.env.PORT || 3000,

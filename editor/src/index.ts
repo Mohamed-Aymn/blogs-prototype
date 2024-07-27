@@ -5,10 +5,10 @@ import cookieParser from 'cookie-parser';
 import { connectToDatabase } from './persistence/db';
 import { postsRouter } from './routes/posts';
 import { connectRedis } from './events/redisClient';
+import { config } from './config';
 
 // configuration
 const app = express();
-const port = process.env.PORT || 3000;
 app.use(cookieParser());
 const router = express.Router();
 
@@ -31,8 +31,8 @@ const startServer = async () => {
         await connectRedis(); 
 
         app.use('/editor', router);
-        app.listen(port, () => {
-            console.log(`Server is running on http://localhost:${port}`);
+        app.listen(config.app.port, () => {
+            console.log(`Server is running on ${config.app.url}`);
         });
     } catch (error) {
         console.error('Failed to connect to the database or Redis', error);
