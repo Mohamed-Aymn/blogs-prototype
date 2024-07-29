@@ -4,7 +4,8 @@ import { authMiddleware } from './middleware/authMiddlware';
 import cookieParser from 'cookie-parser';
 import { connectToDatabase } from './persistence/db';
 import { postsRouter } from './routes/posts';
-import { connectRedis } from './events/redisPubClient';
+import { connectRedisPub } from './events/redisPubClient';
+import { connectRedisSub } from './events/redisSubClient';
 import { config } from './config';
 import { createdPostApiSubscriber } from './events/subscriber/createdPostApiSubscriber';
 
@@ -29,7 +30,8 @@ router.use(express.static(path.join(__dirname, '../ui/dist')));
 const startServer = async () => {
     try {
         await connectToDatabase();
-        await connectRedis(); 
+        await connectRedisSub(); 
+        await connectRedisPub(); 
         createdPostApiSubscriber();
 
         app.use('/editor', router);

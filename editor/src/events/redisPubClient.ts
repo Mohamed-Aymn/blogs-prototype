@@ -7,7 +7,7 @@ const redisPubClient = createClient({
 
 redisPubClient.on('error', (err) => console.error('Redis Client Error', err));
 
-export const connectRedis = async () => {
+export const connectRedisPub = async () => {
     await redisPubClient.connect();
     console.log('Connected to Redis');
 };

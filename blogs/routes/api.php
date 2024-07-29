@@ -36,6 +36,24 @@ Route::prefix('posts')->group(function () {
             return response()->json(['error' => 'unable to fetch post'], 500);
         }
     });
+
+    Route::post('/', function (Request $request) {
+        $validatedData = $request->validate([
+            'userId' => 'nullable|string',
+            'title' => 'required|string|max:255',
+            'content' => 'required|array',
+            'content.*.type' => 'required|integer',
+            'content.*.data' => 'required|string',
+        ]);
+
+        try {
+            $jsonData = json_encode($validatedData);
+            Redis::publish('created-post-api', $jsonData);
+            return response("post stored");
+        } catch (\Exception $e) {
+            return response()->json(['error' => 'unable to create post'], 500);
+        }
+    });
 });
 
 Route::post('/register', function (Request $request) {

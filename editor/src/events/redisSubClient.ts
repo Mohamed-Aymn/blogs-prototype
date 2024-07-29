@@ -7,7 +7,7 @@ const redisSubClient = createClient({
 
 redisSubClient.on('error', (err) => console.error('Redis Client Error', err));
 
-export const connectRedis = async () => {
+export const connectRedisSub = async () => {
     await redisSubClient.connect();
     console.log('Connected to Redis');
 };
