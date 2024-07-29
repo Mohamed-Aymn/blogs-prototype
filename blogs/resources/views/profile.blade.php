@@ -1,7 +1,5 @@
 @extends('layouts.app')
 
-<?php $user = getUserDataFromToken();?>
-
 @section('content')
     <div class="max-w-lg mx-auto my-10 bg-white rounded-lg shadow-md p-5">
         <img class="w-32 h-32 rounded-full mx-auto" src="https://picsum.photos/200" alt="Profile picture">
@@ -9,7 +7,10 @@
         <p class="text-center text-gray-600 mt-1">{{$user->email}}</p>
 
         <div class="flex items-center w-full">
-            <a href="{{env('APP_URL')}}/editor" class="text-gray-500 flex-grow">Create Post</a>
+            {{-- <a href="{{env('APP_URL')}}/editor" class="text-gray-500 flex-grow">Create Post</a> --}}
+            @if ($isOwner)
+                <a href="{{ env('APP_URL') }}/editor" class="text-gray-500 flex-grow">Create Post</a>
+            @endif
 
             <form action="{{ route('logout') }}" method="POST">
                 @csrf

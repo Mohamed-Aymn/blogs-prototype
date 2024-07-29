@@ -6,8 +6,12 @@ use Illuminate\Http\Request;
 
 class ProfileController extends Controller
 {
-    public function index()
+    public function index($id)
     {
-        return view('profile');
+        $isAuthenticated = isAuthenticated();
+        $currentUser = getUserDataFromToken();
+        $isOwner = $currentUser->id == $id;
+
+        return view('profile', ['user' => $currentUser,'isOwner' => $isOwner]);
     }
 }
