@@ -1,6 +1,7 @@
 import { useState, useRef, useEffect, KeyboardEvent } from 'react';
 import axios from 'axios';
 import InputItem, { InputItemRef } from '../components/InputItem';
+import { useConfig } from '../context/ConfigContext';
 
 interface InputItemType {
     id: number;
@@ -19,6 +20,7 @@ function Editor() {
         }
     }, [inputItems]);
 
+    const { config } = useConfig();
     const savePost = async () => {
         const postData = {
             title,
@@ -29,8 +31,8 @@ function Editor() {
         };
 
         try {
-            await axios.post('http://localhost:3000/api/posts', postData);
-            window.location.href = "http://localhost:8000";
+            await axios.post(`${config.apiUrl}/editor/api/posts`, postData);
+            window.location.href = config.apiUrl;
         } catch (error) {
             console.error('Error saving post:', error);
         }

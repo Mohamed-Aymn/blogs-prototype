@@ -1,6 +1,10 @@
 import express from "express";
 import { authMiddleware } from "../middleware/authMiddlware";
 import { createPost, getAllPosts, getPostById } from "../persistence/repositories/postRepository";
+import { createdPostPublisher } from "../events/publisher/createdPostPublisher";
+import { IPost } from "../persistence/types/post";
+import { IPostCreatedEvent } from "../events/types/postCreatedEvent";
+import { getUserIdFromToken } from "../helpers/getUserIdFromToken";
 
 export const postsRouter = express.Router()
 postsRouter.use(express.json());
@@ -40,7 +44,12 @@ postsRouter.post('/', async(req, res) => {
         const data = req.body;
 
         // Create a new post in the database
-        const newPost = await createPost(data);
+        const newPost = await createPost(data) as IPost;
+
+        const id = getUserIdFromToken(req.cookies.token);
+        let postEvent = { ...newPost, userId: id} as IPostCreatedEvent
+
+        await createdPostPublisher(postEvent);
 
         // Send the created post as the response
         res.status(201).json(newPost);

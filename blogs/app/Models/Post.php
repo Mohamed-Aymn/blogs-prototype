@@ -8,6 +8,13 @@ use Illuminate\Database\Eloquent\Model;
 class Post extends Model
 {
     use HasFactory;
+    protected $fillable = [
+        'user_id',
+        'id',
+        'title',
+        'body',
+        'avg_read_time',
+    ];
 
     /**
      * Get the user that owns the post.
