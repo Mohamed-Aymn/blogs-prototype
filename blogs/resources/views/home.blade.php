@@ -19,21 +19,28 @@
         </div>
 
         {{-- blogs list --}}
-        <div class="bg-white border rounded-xl shadow-sm sm:flex ">
-            <div class="p-4 flex flex-col h-full sm:p-7">
-                <h3 class="text-lg font-bold text-gray-800 ">
-                    Card title
-                </h3>
-                <p class="mt-1 text-gray-500 ">
-                    Some quick example text to build on the card title and make up the bulk of the card's content.
-                </p>
-                <div class="mt-5 sm:mt-auto">
-                <p class="text-xs text-gray-500 mt-2">
-                    Last updated 5 mins ago
-                </p>
+        @if($posts->isEmpty())
+            <p>No posts found.</p>
+        @else
+            @foreach($posts as $post)
+                <div class="bg-white border rounded-xl shadow-sm sm:flex ">
+                    <div class="p-4 flex flex-col h-full sm:p-7">
+                        <h3 class="text-lg font-bold text-gray-800 ">
+                            {{ $post->title }}
+                        </h3>
+                        <p class="mt-1 text-gray-500 ">
+                            {{ $post->body}}
+                        </p>
+                        <div class="mt-5 sm:mt-auto">
+                        <p class="text-xs text-gray-500 mt-2">
+                            {{ $post->created_at}}
+                        </p>
+                        </div>
+                    </div>
                 </div>
-            </div>
-        </div>
+            @endforeach
+        @endif
+
     </section>
 @endsection
 
