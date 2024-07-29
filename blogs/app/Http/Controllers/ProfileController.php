@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use App\Models\User;
 
 class ProfileController extends Controller
 {
@@ -12,6 +13,8 @@ class ProfileController extends Controller
         $currentUser = getUserDataFromToken();
         $isOwner = $currentUser->id == $id;
 
-        return view('profile', ['user' => $currentUser,'isOwner' => $isOwner]);
+        $user = User::find($id);
+
+        return view('profile', ['user' => $user ,'isOwner' => $isOwner]);
     }
 }
