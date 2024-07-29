@@ -4,7 +4,8 @@ namespace App\Console\Commands;
 
 use Illuminate\Console\Command;
 use Illuminate\Support\Facades\Redis;
-use Predis\Client as PredisClient;
+use Illuminate\Support\Facades\Log;
+use App\Models\Post;
 
 
 class ReidsSubscribe extends Command
@@ -34,9 +35,21 @@ class ReidsSubscribe extends Command
     public function handle()
     {
         $this->info('start handling');
-        Redis::subscribe(['test-channel'], function ($message) {
-            echo $message;
-            $this->info('Received message: ' . $message);
+        Redis::subscribe(['post-created'], function ($message) {
+            $data = json_decode($message, true);
+            $this->info('Received message: ' . print_r($data, true));
+
+            try {
+                $post = Post::create([
+                    'user_id' => $data['userId'], 
+                    'id' => $data['_id'], 
+                    'avg_read_time' => 3,
+                    'title' => $data['title'],
+                    'body' => $data['data'][0]['data'],
+                ]);
+            } catch (\Exception $e) {
+                $this->info('error: ' . print_r($e, true));
+            }
         });
     }
 }

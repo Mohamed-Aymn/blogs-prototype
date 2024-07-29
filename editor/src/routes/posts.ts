@@ -4,6 +4,7 @@ import { createPost, getAllPosts, getPostById } from "../persistence/repositorie
 import { createdPostPublisher } from "../events/publisher/createdPostPublisher";
 import { IPost } from "../persistence/types/post";
 import { IPostCreatedEvent } from "../events/types/postCreatedEvent";
+import { getUserIdFromToken } from "../helpers/getUserIdFromToken";
 
 export const postsRouter = express.Router()
 postsRouter.use(express.json());
@@ -34,10 +35,6 @@ postsRouter.get('/:id', async (req, res) => {
         res.status(500).json({ error: 'Failed to fetch post' });
     }
 });
-postsRouter.get("/trial", async (req, res) => {
-    return res.send("published")
-
-})
 
 // authenticated routes
 postsRouter.use(authMiddleware);
@@ -49,7 +46,11 @@ postsRouter.post('/', async(req, res) => {
         // Create a new post in the database
         const newPost = await createPost(data) as IPost;
 
-        await createdPostPublisher(newPost as IPostCreatedEvent);
+        const id = getUserIdFromToken(req.cookies.token);
+        let postEvent = { ...newPost, userId: id} as IPostCreatedEvent
+
+        await createdPostPublisher(postEvent);
+
         // Send the created post as the response
         res.status(201).json(newPost);
     } catch (error) {

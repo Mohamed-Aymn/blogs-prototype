@@ -1,6 +1,6 @@
 import { createPost } from '../../persistence/repositories/postRepository';
 import { IPost } from '../../persistence/types/post';
-import redisClient from '../redisClient';
+import redisClient from '../redisSubClient';
 
 export const createdPostApiSubscriber = () => {
     redisClient.subscribe('created-post-api', async (message) => {

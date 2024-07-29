@@ -1,4 +1,4 @@
-import redisClient from '../redisClient';
+import redisClient from '../redisPubClient';
 import { IPostCreatedEvent } from '../types/postCreatedEvent';
 
 export const createdPostPublisher = async (event: IPostCreatedEvent) => {

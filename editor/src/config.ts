@@ -14,4 +14,7 @@ export const config = {
         port: process.env.PORT || 3000,
         url: process.env.APP_URL || 'http://localhost:3000',
     },
+    jwt: {
+        secret: process.env.JWT_SECRET as string,
+    }
 };

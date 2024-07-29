@@ -4,7 +4,7 @@ import { authMiddleware } from './middleware/authMiddlware';
 import cookieParser from 'cookie-parser';
 import { connectToDatabase } from './persistence/db';
 import { postsRouter } from './routes/posts';
-import { connectRedis } from './events/redisClient';
+import { connectRedis } from './events/redisPubClient';
 import { config } from './config';
 import { createdPostApiSubscriber } from './events/subscriber/createdPostApiSubscriber';
 

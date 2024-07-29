@@ -2,6 +2,7 @@ import { ObjectId } from "mongodb";
 
 export interface IPostCreatedEvent{
     _id: string | ObjectId;
+    userId: string;
     title: string;
     content: Array<IPostItem>;
 } 
