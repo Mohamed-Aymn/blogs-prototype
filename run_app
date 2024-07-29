@@ -16,8 +16,8 @@ echo "Starting Laravel application..."
 cd $LARAVEL_APP_PATH || { echo "Failed to change directory to $LARAVEL_APP_PATH"; exit 1; }
 ./vendor/bin/sail up -d --build || { echo "Failed to start Laravel application"; exit 1; }
 
-echo "Building Laravel assets..."
-./vendor/bin/sail npm run build || { echo "Failed to build Laravel assets"; exit 1; }
+echo "Running npm dev server..."
+nohup ./vendor/bin/sail npm run dev > /dev/null 2>&1 &
 
 echo "Running Laravel migrations..."
 ./vendor/bin/sail artisan migrate || { echo "Failed to run Laravel migrations"; exit 1; }
@@ -28,9 +28,11 @@ cd - || { echo "Failed to return to the initial directory"; exit 1; }
 echo "Starting Node.js application..."
 docker-compose -f $NODE_APP_PATH/docker-compose.yml up -d --build || { echo "Failed to start Node.js application"; exit 1; }
 
-echo "Starting other componentns"
+echo "Starting other components..."
 docker-compose up -d --build
 
+echo "Starting Laravel Redis subscriber..."
+cd $LARAVEL_APP_PATH || { echo "Failed to change directory to $LARAVEL_APP_PATH"; exit 1; }
+nohup ./vendor/bin/sail artisan app:redis-sub > /dev/null 2>&1 &
+
 echo "All services started successfully."
-
-

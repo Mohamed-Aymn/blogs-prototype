@@ -5,7 +5,16 @@ use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Redis;
 use App\Models\User;
+
+
+Route::get("/hello", function (){
+
+    Redis::publish('test-channel', 'a test message');
+
+    return "done";
+});
 
 Route::prefix('posts')->group(function () {
     Route::get('/', function (Request $request) {
