@@ -12,6 +12,7 @@ interface InputItemType {
 function Editor() {
     const [inputItems, setInputItems] = useState<InputItemType[]>([{ id: 1, content: '', type: 0 }]);
     const [title, setTitle] = useState<string>('');
+    const [errors, setErrors] = useState<string | null>(null);
     const inputRefs = useRef<(InputItemRef | null)[]>([]);
 
     useEffect(() => {
@@ -21,7 +22,24 @@ function Editor() {
     }, [inputItems]);
 
     const { config } = useConfig();
+
+    const validateForm = () => {
+        const hasNonEmptyItem = inputItems.some(item => item.content.trim() !== '');
+        if (!title.trim()) {
+            setErrors('Title is required.');
+            return false;
+        }
+        if (!hasNonEmptyItem) {
+            setErrors('At least one non-empty item is required.');
+            return false;
+        }
+        setErrors(null);
+        return true;
+    };
+
     const savePost = async () => {
+        if (!validateForm()) return;
+
         const postData = {
             title,
             data: inputItems.map(item => ({
@@ -42,16 +60,13 @@ function Editor() {
         if (e.key === 'Enter' && !e.shiftKey) {
             e.preventDefault();
             if (inputItems[index].content.startsWith('/h2 ')) {
-                // Insert a new InputItem after the H2Item
                 setInputItems(prev => [
                     ...prev.slice(0, index + 1),
                     { id: prev.length + 1, content: '', type: 0 },
                     ...prev.slice(index + 1)
                 ]);
-                // Focus the newly added InputItem
                 setTimeout(() => inputRefs.current[index + 1]?.focus(), 0);
             } else {
-                // Handle Enter in normal InputItem case
                 setInputItems(prev => [...prev, { id: prev.length + 1, content: '', type: 0 }]);
             }
         } else if (e.key === 'Backspace' && e.currentTarget.value === '' && inputItems.length > 1) {
@@ -76,6 +91,7 @@ function Editor() {
                 value={title}
                 onChange={(e) => setTitle(e.target.value)}
             />
+            {errors && <div className="text-red-500 mt-4">{errors}</div>}
             <div id="content" className="mt-10">
                 {inputItems.map((item, index) => (
                     <InputItem
@@ -92,8 +108,8 @@ function Editor() {
                 <button 
                     onClick={() => savePost()}
                     className="bg-gray-500 text-white py-2 px-4 rounded"
-                    >
-                        Save
+                >
+                    Save
                 </button>
             </div>
         </div>
