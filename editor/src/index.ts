@@ -8,7 +8,7 @@ import { connectRedisPub } from './events/redisPubClient';
 import { connectRedisSub } from './events/redisSubClient';
 import { config } from './config';
 import { createdPostApiSubscriber } from './events/subscriber/createdPostApiSubscriber';
-import { updatedPostApiSubscriber } from './events/subscriber/updatedPostApi';
+import { updatedPostApiSubscriber } from './events/subscriber/updatedPostApiSubscriber';
 
 // configuration
 const app = express();
