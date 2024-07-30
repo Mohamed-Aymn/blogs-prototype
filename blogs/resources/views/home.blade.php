@@ -23,7 +23,7 @@
             <p>No posts found.</p>
         @else
             @foreach($posts as $post)
-                <div class="bg-white border rounded-xl shadow-sm sm:flex ">
+                <div class="bg-white border rounded-xl shadow-sm sm:flex mb-2">
                     <div class="p-4 flex flex-col h-full sm:p-7">
                         <h3 class="text-lg font-bold text-gray-800 ">
                             {{ $post->title }}
