@@ -9,7 +9,7 @@ redisPubClient.on('error', (err) => console.error('Redis Client Error', err));
 
 export const connectRedisPub = async () => {
     await redisPubClient.connect();
-    console.log('Connected to Redis');
+    console.log('Connected to Redis as publisher');
 };
 
 export default redisPubClient;

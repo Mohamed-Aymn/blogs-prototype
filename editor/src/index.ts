@@ -8,6 +8,7 @@ import { connectRedisPub } from './events/redisPubClient';
 import { connectRedisSub } from './events/redisSubClient';
 import { config } from './config';
 import { createdPostApiSubscriber } from './events/subscriber/createdPostApiSubscriber';
+import { updatedPostApiSubscriber } from './events/subscriber/updatedPostApi';
 
 // configuration
 const app = express();
@@ -33,6 +34,8 @@ const startServer = async () => {
         await connectRedisSub(); 
         await connectRedisPub(); 
         createdPostApiSubscriber();
+        updatedPostApiSubscriber();
+        
 
         app.use('/editor', router);
         app.listen(config.app.port, () => {

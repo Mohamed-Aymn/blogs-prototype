@@ -8,14 +8,6 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Redis;
 use App\Models\User;
 
-
-Route::get("/hello", function (){
-
-    Redis::publish('test-channel', 'a test message');
-
-    return "done";
-});
-
 Route::prefix('posts')->group(function () {
     Route::get('/', function (Request $request) {
         $url = env('NODE_URL') . '/editor/api/posts';
@@ -34,6 +26,24 @@ Route::prefix('posts')->group(function () {
             return response()->json($response->json());
         } catch (\Exception $e) {
             return response()->json(['error' => 'unable to fetch post'], 500);
+        }
+    });
+
+    Route::put('/{id}', function (Request $request, $id) {
+        $validatedData = $request->validate([
+            'userId' => 'nullable|string',
+            'title' => 'required|string|max:255',
+            'content' => 'required|array',
+            'content.*.type' => 'required|integer',
+            'content.*.data' => 'required|string',
+        ]);
+
+        try {
+            $jsonData = json_encode($validatedData);
+            Redis::publish('updated-post-api', $jsonData);
+            return response("post updated");
+        } catch (\Exception $e) {
+            return response()->json(['error' => 'unable to update post'], 500);
         }
     });
 

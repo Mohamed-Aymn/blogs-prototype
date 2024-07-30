@@ -2,16 +2,16 @@ import { createPost } from '../../persistence/repositories/postRepository';
 import { IPost } from '../../persistence/types/post';
 import { createdPostPublisher } from '../publisher/createdPostPublisher';
 import redisClient from '../redisSubClient';
-import { IPostCreatedEvent } from '../types/postCreatedEvent';
+import { IPostUpdatedEvent } from '../types/postUpdatedEvent';
 
-export const createdPostApiSubscriber = () => {
-    redisClient.subscribe('created-post-api', async (message) => {
+export const updatedPostApiSubscriber = () => {
+    redisClient.subscribe('updated-post-api', async (message) => {
         try {
             const newPost = JSON.parse(message) as IPost;
             await createPost(newPost);
-            await createdPostPublisher(newPost as IPostCreatedEvent);
+            await createdPostPublisher(newPost as IPostUpdatedEvent);
         } catch (error) {
-            console.error('Failed to create post from message:', message, error);
+            console.error('Failed to update post from message:', message, error);
         }
     });
 };
