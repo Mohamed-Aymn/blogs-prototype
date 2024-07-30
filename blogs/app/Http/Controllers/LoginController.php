@@ -3,9 +3,7 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Auth;
 use Tymon\JWTAuth\Facades\JWTAuth;
-use Illuminate\Support\Facades\Cookie;
 
 class LoginController extends Controller
 {
@@ -27,6 +25,7 @@ class LoginController extends Controller
                 'email' => 'The provided credentials do not match our records.',
             ])->onlyInput('email');
         }
+
         setcookie("token", $token);
 
         return redirect()->route('home')->with('success', 'Logged in.');
