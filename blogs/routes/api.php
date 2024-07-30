@@ -29,6 +29,15 @@ Route::prefix('posts')->group(function () {
         }
     });
 
+    Route::delete('/{id}', function ($id) {
+        try {
+            Redis::publish('deleted-post-api', "{$id}");
+            return response("post deleted");
+        } catch (\Exception $e) {
+            return response()->json(['error' => 'unable to delete post'], 500);
+        }
+    });
+
     Route::put('/{id}', function (Request $request, $id) {
         $validatedData = $request->validate([
             'userId' => 'nullable|string',
