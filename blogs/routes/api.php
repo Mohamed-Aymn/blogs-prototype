@@ -30,6 +30,10 @@ Route::prefix('posts')->group(function () {
     });
 
     Route::delete('/{id}', function ($id) {
+        if (!isAuthenticated()) {
+            return response()->json(['error' => 'Unauthorized'], 401);
+        }
+
         try {
             Redis::publish('deleted-post-api', "{$id}");
             return response("post deleted");
@@ -39,6 +43,10 @@ Route::prefix('posts')->group(function () {
     });
 
     Route::put('/{id}', function (Request $request, $id) {
+        if (!isAuthenticated()) {
+            return response()->json(['error' => 'Unauthorized'], 401);
+        }
+
         $validatedData = $request->validate([
             'userId' => 'nullable|string',
             'title' => 'required|string|max:255',
@@ -57,6 +65,10 @@ Route::prefix('posts')->group(function () {
     });
 
     Route::post('/', function (Request $request) {
+        if (!isAuthenticated()) {
+            return response()->json(['error' => 'Unauthorized'], 401);
+        }
+
         $validatedData = $request->validate([
             'userId' => 'nullable|string',
             'title' => 'required|string|max:255',
