@@ -8,7 +8,7 @@ export const updatedPostApiSubscriber = () => {
     redisClient.subscribe('updated-post-api', async (message) => {
         try {
             const newPost = JSON.parse(message) as IPost;
-            await createPost(newPost);
+            await createPost(newPost); 
             await createdPostPublisher(newPost as IPostUpdatedEvent);
         } catch (error) {
             console.error('Failed to update post from message:', message, error);
