@@ -65,18 +65,20 @@ Route::prefix('posts')->group(function () {
         });
 
         Route::post('/', function (Request $request) {
-            $validatedData = $request->validate([
-                'userId' => 'nullable|string',
-                'title' => 'required|string|max:255',
-                'content' => 'required|array',
-                'content.*.type' => 'required|integer',
-                'content.*.data' => 'required|string',
-            ]);
-
             try {
+                $validatedData = $request->validate([
+                    'userId' => 'integer',
+                    'title' => 'required|string|max:255',
+                    'content' => 'required|array',
+                    'content.*.type' => 'required|integer',
+                    'content.*.data' => 'required|string',
+                ]);
+
                 $jsonData = json_encode($validatedData);
                 Redis::publish('created-post-api', $jsonData);
                 return response("post stored");
+            } catch (ValidationException $e) {
+                return response()->json(['errors' => $e->errors()], 422);
             } catch (\Exception $e) {
                 return response()->json(['error' => 'unable to create post'], 500);
             }
