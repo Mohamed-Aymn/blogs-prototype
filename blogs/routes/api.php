@@ -7,6 +7,7 @@ use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Redis;
 use App\Models\User;
+use App\Http\Middleware\BearerTokenCheck;
 
 Route::prefix('posts')->group(function () {
     Route::get('/', function (Request $request) {
@@ -29,61 +30,51 @@ Route::prefix('posts')->group(function () {
         }
     });
 
-    Route::delete('/{id}', function ($id) {
-        if (!isAuthenticated()) {
-            return response()->json(['error' => 'Unauthorized'], 401);
-        }
+    Route::middleware(BearerTokenCheck::class)->group(function () {
+        Route::delete('/{id}', function ($id) {
+            try {
+                Redis::publish('deleted-post-api', "{$id}");
+                return response("post deleted");
+            } catch (\Exception $e) {
+                return response()->json(['error' => 'unable to delete post'], 500);
+            }
+        });
 
-        try {
-            Redis::publish('deleted-post-api', "{$id}");
-            return response("post deleted");
-        } catch (\Exception $e) {
-            return response()->json(['error' => 'unable to delete post'], 500);
-        }
-    });
+        Route::put('/{id}', function (Request $request, $id) {
+            $validatedData = $request->validate([
+                'userId' => 'nullable|string',
+                'title' => 'required|string|max:255',
+                'content' => 'required|array',
+                'content.*.type' => 'required|integer',
+                'content.*.data' => 'required|string',
+            ]);
 
-    Route::put('/{id}', function (Request $request, $id) {
-        if (!isAuthenticated()) {
-            return response()->json(['error' => 'Unauthorized'], 401);
-        }
+            try {
+                $jsonData = json_encode($validatedData);
+                Redis::publish('updated-post-api', $jsonData);
+                return response("post updated");
+            } catch (\Exception $e) {
+                return response()->json(['error' => 'unable to update post'], 500);
+            }
+        });
 
-        $validatedData = $request->validate([
-            'userId' => 'nullable|string',
-            'title' => 'required|string|max:255',
-            'content' => 'required|array',
-            'content.*.type' => 'required|integer',
-            'content.*.data' => 'required|string',
-        ]);
+        Route::post('/', function (Request $request) {
+            $validatedData = $request->validate([
+                'userId' => 'nullable|string',
+                'title' => 'required|string|max:255',
+                'content' => 'required|array',
+                'content.*.type' => 'required|integer',
+                'content.*.data' => 'required|string',
+            ]);
 
-        try {
-            $jsonData = json_encode($validatedData);
-            Redis::publish('updated-post-api', $jsonData);
-            return response("post updated");
-        } catch (\Exception $e) {
-            return response()->json(['error' => 'unable to update post'], 500);
-        }
-    });
-
-    Route::post('/', function (Request $request) {
-        if (!isAuthenticated()) {
-            return response()->json(['error' => 'Unauthorized'], 401);
-        }
-
-        $validatedData = $request->validate([
-            'userId' => 'nullable|string',
-            'title' => 'required|string|max:255',
-            'content' => 'required|array',
-            'content.*.type' => 'required|integer',
-            'content.*.data' => 'required|string',
-        ]);
-
-        try {
-            $jsonData = json_encode($validatedData);
-            Redis::publish('created-post-api', $jsonData);
-            return response("post stored");
-        } catch (\Exception $e) {
-            return response()->json(['error' => 'unable to create post'], 500);
-        }
+            try {
+                $jsonData = json_encode($validatedData);
+                Redis::publish('created-post-api', $jsonData);
+                return response("post stored");
+            } catch (\Exception $e) {
+                return response()->json(['error' => 'unable to create post'], 500);
+            }
+        });  
     });
 });
 
@@ -117,5 +108,6 @@ Route::post('/login', function (Request $request) {
             'email' => 'The provided credentials do not match our records.',
         ]);
     }
-    return response()->json(token: $token);
+
+    return response()->json(['token' => $token]);
 });
