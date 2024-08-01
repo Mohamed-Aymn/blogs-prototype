@@ -9,6 +9,7 @@ import { connectRedisSub } from './events/redisSubClient';
 import { config } from './config';
 import { createdPostApiSubscriber } from './events/subscriber/createdPostApiSubscriber';
 import { updatedPostApiSubscriber } from './events/subscriber/updatedPostApiSubscriber';
+import { deletedPostApiSubscriber } from './events/subscriber/deletedPostApiSubscriber';
 
 // configuration
 const app = express();
@@ -34,6 +35,7 @@ const startServer = async () => {
         await connectRedisSub(); 
         await connectRedisPub(); 
         createdPostApiSubscriber();
+        deletedPostApiSubscriber();
         updatedPostApiSubscriber();
         
 

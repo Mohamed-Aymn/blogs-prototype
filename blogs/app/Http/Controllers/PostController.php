@@ -19,6 +19,10 @@ class PostController extends Controller
             return response()->json(['error' => 'Unable to fetch blog data'], 500);
         }
 
+        if ($data['error']){
+            $data = null;
+        }
+
         return view('post', ['data' => $data]);
     }
 }

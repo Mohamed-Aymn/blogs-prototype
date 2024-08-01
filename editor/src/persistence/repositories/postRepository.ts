@@ -31,6 +31,7 @@ export const updatePost = async (id: string, post: Partial<IPost>): Promise<void
 };
 
 export const deletePost = async (id: string): Promise<void> => {
+    console.log("delete function triggered")
     const collection = getPostsCollection();
     await collection.deleteOne({ _id: new ObjectId(id) });
 };

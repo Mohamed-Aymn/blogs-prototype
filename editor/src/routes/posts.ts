@@ -20,7 +20,6 @@ postsRouter.get('/', async (req, res) => {
     }
 });
 postsRouter.get('/:id', async (req, res) => {
-    console.log("endpoint hit")
     try {
         const postId = req.params.id;
         const post = await getPostById(postId);

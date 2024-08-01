@@ -7,6 +7,7 @@ use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Redis;
 use App\Models\User;
+use App\Models\Post;
 use App\Http\Middleware\BearerTokenCheck;
 
 Route::prefix('posts')->group(function () {
@@ -33,6 +34,11 @@ Route::prefix('posts')->group(function () {
     Route::middleware(BearerTokenCheck::class)->group(function () {
         Route::delete('/{id}', function ($id) {
             try {
+                $post = Post::find($id);
+                if (!$post) {
+                    return response()->json(['error' => 'Post not found'], 404);
+                }
+                $post->delete();
                 Redis::publish('deleted-post-api', "{$id}");
                 return response("post deleted");
             } catch (\Exception $e) {
