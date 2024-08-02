@@ -90,13 +90,17 @@ class RedisSubscribe extends Command
      */
     protected function createPost(array $data)
     {
-        Post::create([
-            'user_id' => $data['userId'],
-            'id' => $data['_id'],
-            'avg_read_time' => 3,
-            'title' => $data['title'],
-            'body' => $data['data'][0]['data'],
-        ]);
+        try{
+            Post::create([
+                'id' => $data['_id'],
+                'title' => $data['title'],
+                'user_id' => $data['userId'],
+                'avg_read_time' => 3,
+                'body' => $data['content'][0]['data'],
+            ]);
+        }catch(Exception $e){
+            $this->info($e);
+        }
     }
 
     /**
