@@ -23,7 +23,8 @@ services:
         networks:
             - blogs_app
         depends_on:
-            - mysql
+            mysql:
+                condition: service_healthy
     mysql:
         image: 'mysql/mysql-server:8.0'
         ports:
@@ -53,4 +54,4 @@ networks:
         external: true
 volumes:
     sail-mysql:
-        driver: local
+        # driver: local

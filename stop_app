@@ -6,7 +6,7 @@ NODE_APP_PATH="./editor"
 # Stop Laravel app
 echo "Stopping Laravel application..."
 cd $LARAVEL_APP_PATH || { echo "Failed to change directory to $LARAVEL_APP_PATH"; exit 1; }
-./vendor/bin/sail down || { echo "Failed to stop Laravel application"; exit 1; }
+./vendor/bin/sail down -v || { echo "Failed to stop Laravel application"; exit 1; }
 cd - || { echo "Failed to return to the initial directory"; exit 1; }
 
 # Stop Node.js app

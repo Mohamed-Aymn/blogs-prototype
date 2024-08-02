@@ -22,6 +22,9 @@ echo "Building Laravel assets..."
 echo "Running Laravel migrations..."
 ./vendor/bin/sail artisan migrate || { echo "Failed to run Laravel migrations"; exit 1; }
 
+echo "Running Laravel seeders..."
+./vendor/bin/sail artisan db:seed || { echo "Failed to run Laravel seeders"; exit 1; }
+
 cd - || { echo "Failed to return to the initial directory"; exit 1; }
 
 # Spin up Node.js app
