@@ -19,7 +19,9 @@ class PostController extends Controller
             return response()->json(['error' => 'Unable to fetch blog data'], 500);
         }
 
-        if ($data['error']){
+        // dd($data);
+
+        if (isset($data['error']) && $data['error']) {
             $data = null;
         }
 
