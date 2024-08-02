@@ -26,7 +26,10 @@ services:
     ports:
       - "27017:27017"
     volumes:
-      - mongo-data:/data/db
+      # - mongo-data:/data/db # in case of fresh start is not needed
+      - ./mongo:/docker-entrypoint-initdb.d  # Mount the init scripts directory
+      - /data/db  # Use an anonymous volume to ensure a fresh start each time
+
     networks:
       - blogs_app
 
