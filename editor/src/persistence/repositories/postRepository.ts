@@ -27,7 +27,8 @@ export const getAllPosts = async (): Promise<IPost[]> => {
 
 export const updatePost = async (id: string, post: Partial<IPost>): Promise<void> => {
     const collection = getPostsCollection();
-    await collection.updateOne({ _id: new ObjectId(id) }, { $set: post });
+    const { _id, ...updateFields } = post; // Exclude _id from the update fields
+    await collection.updateOne({ _id: new ObjectId(id) }, { $set: updateFields });
 };
 
 export const deletePost = async (id: string): Promise<void> => {

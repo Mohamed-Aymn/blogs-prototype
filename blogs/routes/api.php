@@ -47,15 +47,15 @@ Route::prefix('posts')->group(function () {
         });
 
         Route::put('/{id}', function (Request $request, $id) {
-            $validatedData = $request->validate([
-                'userId' => 'nullable|string',
-                'title' => 'required|string|max:255',
-                'content' => 'required|array',
-                'content.*.type' => 'required|integer',
-                'content.*.data' => 'required|string',
-            ]);
-
             try {
+                $validatedData = $request->validate([
+                    'userId' => 'integer',
+                    'title' => 'required|string|max:255',
+                    'content' => 'required|array',
+                    'content.*.type' => 'required|integer',
+                    'content.*.data' => 'required|string',
+                ]);
+                $validatedData['_id'] = $id;
                 $jsonData = json_encode($validatedData);
                 Redis::publish('updated-post-api', $jsonData);
                 return response("post updated");
