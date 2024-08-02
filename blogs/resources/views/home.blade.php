@@ -3,7 +3,7 @@
 @section('content')
     <section class="section-first">
         {{-- search bar --}}
-        <div class="flex justify-center w-full mb-7">
+        {{-- <div class="flex justify-center w-full mb-7">
             <div class="relative max-w-md flex-grow"> 
                 <div class="relative">
                     <div class="absolute inset-y-0 start-0 flex items-center pointer-events-none z-20 ps-3.5">
@@ -16,7 +16,7 @@
                 </div>
             
             </div>
-        </div>
+        </div> --}}
 
         {{-- blogs list --}}
         @if($posts->isEmpty())
