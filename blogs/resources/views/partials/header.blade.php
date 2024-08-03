@@ -5,7 +5,7 @@
 
 <header class="flex flex-wrap w-full bg-white text-sm py-4">
     <nav class="max-w-[85rem] w-full mx-auto px-6 flex items-center justify-between" aria-label="Global">
-        <a class="flex-none text-xl font-semibold " href="/">Blogs</a>
+        <a class="flex-none text-xl font-semibold " href="/">Blogs Prototype</a>
 
         <div id="navbar-with-collapse" class="transition-all">
             @if (isAuthenticated())

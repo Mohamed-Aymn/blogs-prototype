@@ -5,7 +5,7 @@
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <link rel="icon" type="image/svg+xml" href="/icon.svg" />
 
-        <title>Blogs</title>
+        <title>Blogs Prototype</title>
         @vite('resources/css/app.css')
     </head>
 
