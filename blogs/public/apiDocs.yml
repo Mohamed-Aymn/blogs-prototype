@@ -1,7 +1,7 @@
 openapi: 3.0.0
 info:
   title: Coronatime API
-  description: Here goes description
+  description: This is the Coronatime API documentation.
   version: 0.1.9
 
 servers:
@@ -16,10 +16,248 @@ paths:
       summary: Returns a list of posts.
       responses:
         '200': 
-          description: A JSON array posts
+          description: A JSON array of posts
           content:
             application/json:
               schema: 
                 type: array
                 items: 
-                  type: string
+                  $ref: '#/components/schemas/Post'
+        '500':
+          description: Unable to fetch data from external service
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+
+  /posts/{id}:
+    get:
+      summary: Returns a single post.
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+          description: The post ID
+      responses:
+        '200':
+          description: A single post
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Post'
+        '500':
+          description: Unable to fetch post
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+    delete:
+      summary: Deletes a single post.
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+          description: The post ID
+      responses:
+        '200':
+          description: Post deleted
+        '404':
+          description: Post not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '500':
+          description: Unable to delete post
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+    put:
+      summary: Updates a single post.
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+          description: The post ID
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Post'
+      responses:
+        '200':
+          description: Post updated
+        '500':
+          description: Unable to update post
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+
+  /register:
+    post:
+      summary: Registers a new user.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UserRegistration'
+      responses:
+        '200':
+          description: User created successfully
+        '422':
+          description: Validation errors
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ValidationErrors'
+        '500':
+          description: User not created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+
+  /login:
+    post:
+      summary: Logs in a user.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UserLogin'
+      responses:
+        '200':
+          description: Token generated
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Token'
+        '422':
+          description: Validation errors
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ValidationErrors'
+        '500':
+          description: Unable to login
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+
+components:
+  schemas:
+    Post:
+      type: object
+      properties:
+        _id:
+          type: string
+          description: The unique identifier for the post
+          example: 60d5ec2f1d1e8b42d4c6b6e8
+        userId:
+          type: integer
+          description: ID of the user who created the post
+          example: 1
+        title:
+          type: string
+          description: The title of the post
+          example: "Sample Post Title"
+        content:
+          type: array
+          items:
+            type: object
+            properties:
+              type:
+                type: integer
+                description: The type of the post item
+                example: 1
+              data:
+                type: string
+                description: The content data of the post item
+                example: "Sample content data"
+
+    UserRegistration:
+      type: object
+      properties:
+        name:
+          type: string
+          description: The name of the user
+          example: John Doe
+        email:
+          type: string
+          description: The email of the user
+          example: john.doe@example.com
+        password:
+          type: string
+          description: The password of the user
+          example: secretPassword123
+        password_confirmation:
+          type: string
+          description: Password confirmation
+          example: secretPassword123
+
+    UserLogin:
+      type: object
+      properties:
+        email:
+          type: string
+          description: The email of the user
+          example: mohamedaymn218@gmail.com
+        password:
+          type: string
+          description: The password of the user
+          example: 12345678
+
+    Token:
+      type: object
+      properties:
+        token:
+          type: string
+          description: The JWT token
+          example: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...
+
+    Error:
+      type: object
+      properties:
+        error:
+          type: string
+          description: Error message
+          example: Unable to fetch data from external service
+
+    ValidationErrors:
+      type: object
+      properties:
+        errors:
+          type: object
+          additionalProperties:
+            type: array
+            items:
+              type: string
+          example: 
+            email:
+              - The email field is required.
+              - The email must be a valid email address.
+            password:
+              - The password field is required.
+              - The password must be at least 8 characters.
+
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
